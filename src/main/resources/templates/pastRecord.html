@@ -2,9 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Employee Home</title>
+  <title>Past Records Page</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
+    nav{
+      margin-bottom: 20px;
+    }
     .table-wrapper {
       margin-bottom: 20px;
     }
@@ -26,18 +30,25 @@
     .table-content.show {
       display: block;
     }
-    .add-request {
-      margin-left: 10px;
-      font-size: 14px;
-      padding: 5px 10px;
-    }
   </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light" style="margin-bottom: 10px">
-  <a class="navbar-brand" href="#">MyCompany Employee Page</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-light" >
+  <a class="navbar-brand" href="#">MyCompany</a>
   <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="home">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="registration">Add Employee</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="disable-user">Disable User</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="enable-user">Enable User</a>
+      </li>
       <li class="nav-item">
         <a class="nav-link" href="/logout">LogOut</a>
       </li>
@@ -45,16 +56,15 @@
   </div>
 </nav>
 <div class="container">
-  <h1>Welcome, <span th:text="${fName}"></span>!</h1>
   <div class="table-wrapper">
     <div class="d-flex justify-content-between align-items-center">
       <div class="table-title" data-toggle="collapse" data-target="#resource-requests">Resource Requests</div>
-      <a href="/employee/resourceRequest" class="btn btn-primary add-request">Add</a>
     </div>
     <div id="resource-requests" class="table-content collapse">
       <table class="table table-striped">
         <thead>
         <tr>
+          <th>ID</th>
           <th>Resource Type</th>
           <th>Description</th>
           <th>Request Date</th>
@@ -63,6 +73,7 @@
         </thead>
         <tbody>
         <tr th:each="resourceRequest : ${resourceRequests}">
+          <td th:text="${resourceRequest.getAppUser().getEmail()}"></td>
           <td th:text="${resourceRequest.resourceType}"></td>
           <td th:text="${resourceRequest.description}"></td>
           <td th:text="${resourceRequest.requestDate}"></td>
@@ -75,21 +86,27 @@
   <div class="table-wrapper">
     <div class="d-flex justify-content-between align-items-center">
       <div class="table-title" data-toggle="collapse" data-target="#leave-requests">Leave Requests</div>
-      <a href="/employee/leaveRequest" class="btn btn-primary add-request">Add</a>
     </div>
     <div id="leave-requests" class="table-content collapse">
       <table class="table table-striped">
         <thead>
         <tr>
+          <th>ID</th>
           <th>Start Date</th>
           <th>End Date</th>
+          <th>Description</th>
+          <th>Request Date</th>
           <th>Status</th>
+
         </tr>
         </thead>
         <tbody>
         <tr th:each="leaveRequest : ${leaveRequests}">
+          <td th:text="${leaveRequest.getAppUser().getEmail()}"></td>
           <td th:text="${leaveRequest.fromDate}"></td>
           <td th:text="${leaveRequest.toDate}"></td>
+          <td th:text="${leaveRequest.description}"></td>
+          <td th:text="${leaveRequest.requestDate}"></td>
           <td th:text="${leaveRequest.status}"></td>
         </tr>
         </tbody>
@@ -98,27 +115,32 @@
   </div>
   <div class="table-wrapper">
     <div class="d-flex justify-content-between align-items-center">
-    <div class="table-title" data-toggle="collapse" data-target="#incentive-requests">Incentive Requests</div>
-    <a href="/employee/incentiveRequest" class="btn btn-primary add-request">Add</a>
-  </div>
-  <div id="incentive-requests" class="table-content collapse">
-    <table class="table table-striped">
-      <thead>
-      <tr>
-        <th>Incentive Type</th>
-        <th>Amount</th>
-        <th>Status</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr th:each="incentiveRequest : ${incentiveRequests}">
-        <td th:text="${incentiveRequest.incentiveType}"></td>
-        <td th:text="${incentiveRequest.amount}"></td>
-        <td th:text="${incentiveRequest.status}"></td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+      <div class="table-title" data-toggle="collapse" data-target="#incentive-requests">Incentive Requests</div>
+    </div>
+    <div id="incentive-requests" class="table-content collapse">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Incentive Type</th>
+          <th>Amount</th>
+          <th>Description</th>
+          <th>Request Date</th>
+          <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="incentiveRequest : ${incentiveRequests}">
+          <td th:text="${incentiveRequest.getAppUser().getEmail()}"></td>
+          <td th:text="${incentiveRequest.incentiveType}"></td>
+          <td th:text="${incentiveRequest.amount}"></td>
+          <td th:text="${incentiveRequest.description}"></td>
+          <td th:text="${incentiveRequest.requestDate}"></td>
+          <td th:text="${incentiveRequest.status}"></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

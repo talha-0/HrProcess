@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Disable USer</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <style>
+    nav{
+      margin-bottom: 20px;
+    }
+    .table-wrapper {
+      margin-bottom: 20px;
+    }
+    .table-striped tbody tr:nth-of-type(odd) {
+      background-color: #f9f9f9;
+    }
+    .table-content {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light" >
+  <a class="navbar-brand" href="#">MyCompany</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="home">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="view-past-requests">View Past Requests</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="registration">Add Employee</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="disable-user">Disable User</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/logout">LogOut</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div class="container">
+  <div class="table-wrapper">
+    <div id="resource-requests" class="table-content">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="appUser : ${appUsers}">
+          <td th:text="${appUser.getEmail()}"></td>
+          <td th:text="${appUser.firstName}"></td>
+          <td th:text="${appUser.lastName}"></td>
+          <td>
+            <form th:action="@{enable-user}" method="post">
+              <input type="hidden" name="id" th:value="${appUser.getEmail()}" />
+              <button type="submit" class="btn btn-success">Enable</button>
+            </form>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</body>
+</html>
