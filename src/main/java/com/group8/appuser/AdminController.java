@@ -1,6 +1,9 @@
 package com.group8.appuser;
 
 import com.group8.Resource.*;
+import com.group8.announcement.Announcement;
+import com.group8.announcement.AnnouncementRepository;
+import com.group8.announcement.AnnouncementService;
 import com.group8.registration.RegistrationRequest;
 import com.group8.registration.RegistrationService;
 import lombok.AllArgsConstructor;
@@ -19,6 +22,8 @@ public class AdminController {
     private ResourceRequestRepository resourceRequestRepository;
     private LeaveRequestRepository leaveRequestRepository;
     private IncentiveRequestRepository incentiveRequestRepository;
+    private AnnouncementRepository announcementRepository;
+    private AnnouncementService announcementService;
 
     @GetMapping("/home")
     public String showHomePage(Model model) {
@@ -26,13 +31,30 @@ public class AdminController {
         List<ResourceRequest> resourceRequests = resourceRequestRepository.findByStatus("Pending");
         List<IncentiveRequest> incentiveRequests=incentiveRequestRepository.findByStatus("Pending");
         List<LeaveRequest> leaveRequests=leaveRequestRepository.findByStatus("Pending");
+        List<Announcement> announcements=announcementRepository.findByOrderByIdDesc();
 
         // add the user's information and ResourceRequest records to the model
         model.addAttribute("resourceRequests", resourceRequests);
         model.addAttribute("incentiveRequests", incentiveRequests);
         model.addAttribute("leaveRequests", leaveRequests);
+        model.addAttribute("announcements", announcements);
 
         return "adminHome"; // returns the name of your home page HTML template
+    }
+    @GetMapping("/announcements/create")
+    public String showCreateAnnouncementForm(Model model) {
+        model.addAttribute("announcement", new Announcement());
+        return "createAnnouncement";
+    }
+    @PostMapping("/announcements/create")
+    public String submitAnnouncementForm(@ModelAttribute Announcement announcement) {
+        announcementService.saveAnnouncement(announcement);
+        return "redirect:/admin/home";
+    }
+    @PostMapping("/delete-announcement")
+    public String deleteAnnouncement(@RequestParam Long id) {
+        announcementRepository.deleteById(id);
+        return "redirect:/admin/home";
     }
     @GetMapping("/view-past-requests")
     public String showpastPage(Model model) {

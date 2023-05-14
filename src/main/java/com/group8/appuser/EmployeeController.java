@@ -1,6 +1,8 @@
 package com.group8.appuser;
 
 import com.group8.Resource.*;
+import com.group8.announcement.Announcement;
+import com.group8.announcement.AnnouncementRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +24,7 @@ public class EmployeeController {
     private ResourceRequestRepository resourceRequestRepository;
     private LeaveRequestRepository leaveRequestRepository;
     private IncentiveRequestRepository incentiveRequestRepository;
+    private AnnouncementRepository announcementRepository;
     @GetMapping("/home")
     public String showHomePage(Authentication authentication, Model model) {
         // retrieve the user's information from the Authentication object
@@ -32,11 +35,13 @@ public class EmployeeController {
         List<ResourceRequest> resourceRequests = resourceRequestRepository.findByAppUser(appUser);
         List<IncentiveRequest> incentiveRequests=incentiveRequestRepository.findByAppUser(appUser);
         List<LeaveRequest> leaveRequests=leaveRequestRepository.findByAppUser(appUser);
+        List<Announcement> announcements=announcementRepository.findByOrderByIdDesc();
         // add the user's information and ResourceRequest records to the model
         model.addAttribute("fName", appUser.getFirstName());
         model.addAttribute("resourceRequests", resourceRequests);
         model.addAttribute("incentiveRequests", incentiveRequests);
         model.addAttribute("leaveRequests", leaveRequests);
+        model.addAttribute("announcements", announcements);
 
         return "employeeHome"; // returns the name of your home page HTML template
     }

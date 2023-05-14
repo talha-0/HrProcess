@@ -29,7 +29,7 @@
     </div>
 </nav>
 <div class="container">
-    <h1 class="text-center my-5">Sign Up</h1>
+    <h1 class="text-center my-5">Add Emloyee</h1>
     <form th:action="@{process}" th:object="${request}" method="post">
         <div class="form-group">
             <label for="email">Email address:</label>
@@ -48,9 +48,8 @@
             <input type="text" class="form-control" id="lastName" name="lastName" th:field="*{lastName}" required>
         </div>
 
-        <button type="submit" class="btn btn-primary">Sign Up</button>
+        <button type="submit" class="btn btn-primary">Add</button>
     </form>
-    <p class="text-center mt-3">Already have an account? <a href="/login" th:href="@{/login}">Log in</a></p>
 </div>
 </body>
 </html>
