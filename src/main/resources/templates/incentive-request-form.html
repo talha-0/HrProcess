@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Incentive Request Form</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Incentive Request Form</h1>
+    <form th:action="@{incentiveRequest}" th:object="${incentiveRequest}" method="post">
+        <div class="form-group">
+            <label for="employee">Employee:</label>
+            <input type="text" class="form-control" id="employee" th:value="${employee.getEmail()}" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea class="form-control" id="description" th:field="*{description}" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="incentiveType">Incentive Type:</label>
+            <select class="form-control" id="incentiveType" th:field="*{incentiveType}" required>
+                <option value="">-- Select Incentive Type --</option>
+                <option value="Bonus">Bonus</option>
+                <option value="Commission">Commission</option>
+                <option value="Medical Allowance">Medical Allowance</option>
+                <option value="Transport">Transport</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="amount">Amount:</label>
+            <input type="number" class="form-control" id="amount" th:field="*{amount}" required min="1" max="100000">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+</body>
+</html>

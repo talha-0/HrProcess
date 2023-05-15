@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Resource Request Form</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+  <h1>Resource Request Form</h1>
+  <form th:action="@{resourceRequest}" th:object="${resourceRequest}" method="post">
+    <div class="form-group">
+      <label for="employee">Employee:</label>
+      <input type="text" class="form-control" id="employee" th:value="${employee.getEmail()}" readonly>
+    </div>
+    <div class="form-group">
+      <label for="resourceType">Resource Type:</label>
+      <select class="form-control" id="resourceType" th:field="*{resourceType}" required>
+        <option value="">-- Select a resource type --</option>
+        <option value="Laptop">Laptop</option>
+        <option value="Desktop">Desktop</option>
+        <option value="Monitor">Monitor</option>
+        <option value="Keyboard">Keyboard</option>
+        <option value="Mouse">Mouse</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="description">Description:</label>
+      <textarea class="form-control" id="description" th:field="*{description}" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+</body>
+</html>
