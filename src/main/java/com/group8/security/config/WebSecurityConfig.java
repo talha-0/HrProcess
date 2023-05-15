@@ -24,8 +24,7 @@ public class WebSecurityConfig {
 
         http.csrf().disable()
                 .authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers("/registration/**").hasAuthority("Admin")
-                                .requestMatchers("/admin/**").hasAuthority("Admin")
+                        authorize.requestMatchers("/admin/**").hasAuthority("Admin")
                                 .requestMatchers("/employee/**").hasAuthority("Employee")
                 ).formLogin()
                     .successHandler(authenticationSuccessHandler)
