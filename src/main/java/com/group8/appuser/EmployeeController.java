@@ -3,15 +3,14 @@ package com.group8.appuser;
 import com.group8.Resource.*;
 import com.group8.announcement.Announcement;
 import com.group8.announcement.AnnouncementRepository;
+import com.group8.task.Task;
+import com.group8.task.TaskService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,6 +24,8 @@ public class EmployeeController {
     private LeaveRequestRepository leaveRequestRepository;
     private IncentiveRequestRepository incentiveRequestRepository;
     private AnnouncementRepository announcementRepository;
+    private TaskService taskService;
+
     @GetMapping("/home")
     public String showHomePage(Authentication authentication, Model model) {
         // retrieve the user's information from the Authentication object
@@ -36,14 +37,27 @@ public class EmployeeController {
         List<IncentiveRequest> incentiveRequests=incentiveRequestRepository.findByAppUser(appUser);
         List<LeaveRequest> leaveRequests=leaveRequestRepository.findByAppUser(appUser);
         List<Announcement> announcements=announcementRepository.findByOrderByIdDesc();
+        List<Task> tasks=taskService.getTasksForEmployee(username);
+
         // add the user's information and ResourceRequest records to the model
         model.addAttribute("fName", appUser.getFirstName());
         model.addAttribute("resourceRequests", resourceRequests);
         model.addAttribute("incentiveRequests", incentiveRequests);
         model.addAttribute("leaveRequests", leaveRequests);
         model.addAttribute("announcements", announcements);
+        model.addAttribute("tasks", tasks);
 
         return "employeeHome"; // returns the name of your home page HTML template
+    }
+    @PostMapping("/mark-done")
+    public String markTaskAsDone(@RequestParam("id") Long taskId) {
+        Task task = taskService.getTaskById(taskId);
+
+        task.setStatus("Done");
+        taskService.saveTask(task);
+
+        // Redirect to the employee's task list page
+        return "redirect:/employee/home";
     }
 
     @GetMapping("/resourceRequest")

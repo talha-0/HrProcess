@@ -32,4 +32,5 @@ public interface AppUserRepository extends JpaRepository<AppUser,Long> {
     @Query("delete from AppUser a " +
             "WHERE a.email = ?1")
     void delete(String email);
+
 }

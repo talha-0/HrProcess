@@ -73,6 +73,39 @@
 
   <div class="table-wrapper">
     <div class="d-flex justify-content-between align-items-center">
+      <div class="table-title" data-toggle="collapse" data-target="#task-list">Task List</div>
+    </div>
+    <div id="task-list" class="table-content collapse">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Description</th>
+          <th>Due Date</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="task : ${tasks}">
+          <td th:text="${task.description}"></td>
+          <td th:text="${task.dueDate}"></td>
+          <td th:text="${task.status}"></td>
+          <td>
+            <th:block th:if="${task.status != 'Done'}">
+              <form th:action="@{mark-done}" method="post">
+                <input type="hidden" name="id" th:value="${task.id}" />
+                <button type="submit" class="btn btn-success">Mark as Done</button>
+              </form>
+            </th:block>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <div class="d-flex justify-content-between align-items-center">
       <div class="table-title" data-toggle="collapse" data-target="#resource-requests">Resource Requests</div>
       <a href="/employee/resourceRequest" class="btn btn-primary add-request">Add</a>
     </div>
@@ -123,9 +156,9 @@
   </div>
   <div class="table-wrapper">
     <div class="d-flex justify-content-between align-items-center">
-    <div class="table-title" data-toggle="collapse" data-target="#incentive-requests">Incentive Requests</div>
-    <a href="/employee/incentiveRequest" class="btn btn-primary add-request">Add</a>
-  </div>
+      <div class="table-title" data-toggle="collapse" data-target="#incentive-requests">Incentive Requests</div>
+      <a href="/employee/incentiveRequest" class="btn btn-primary add-request">Add</a>
+    </div>
   <div id="incentive-requests" class="table-content collapse">
     <table class="table table-striped">
       <thead>

@@ -210,9 +210,43 @@
         </table>
 
       </div>
-    </div>
 
-</div>
+  <div class="table-wrapper">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="table-title" data-toggle="collapse" data-target="#tasks">Active Tasks</div>
+      <a href="tasks/create" class="btn btn-primary add-request">Add</a>
+    </div>
+    <div id="tasks" class="table-content collapse">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Employee Id</th>
+          <th>Description</th>
+          <th>Status</th>
+          <th>Due Date</th>
+          <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="task : ${tasks}">
+          <td th:text="${task.appUser.email}"></td>
+          <td th:text="${task.description}"></td>
+          <td th:text="${task.dueDate}"></td>
+          <td th:text="${task.status}"></td>
+          <td>
+            <div class="btn-group">
+              <form th:action="@{delete-task}" method="post">
+                <input type="hidden" name="id" th:value="${task.id}" />
+                <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>

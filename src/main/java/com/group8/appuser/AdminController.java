@@ -6,7 +6,10 @@ import com.group8.announcement.AnnouncementRepository;
 import com.group8.announcement.AnnouncementService;
 import com.group8.registration.RegistrationRequest;
 import com.group8.registration.RegistrationService;
+import com.group8.task.Task;
+import com.group8.task.TaskService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +27,8 @@ public class AdminController {
     private IncentiveRequestRepository incentiveRequestRepository;
     private AnnouncementRepository announcementRepository;
     private AnnouncementService announcementService;
+    private final TaskService taskService;
+    private AppUserService appUserService;
 
     @GetMapping("/home")
     public String showHomePage(Model model) {
@@ -32,15 +37,37 @@ public class AdminController {
         List<IncentiveRequest> incentiveRequests=incentiveRequestRepository.findByStatus("Pending");
         List<LeaveRequest> leaveRequests=leaveRequestRepository.findByStatus("Pending");
         List<Announcement> announcements=announcementRepository.findByOrderByIdDesc();
-
+        List<Task> tasks=taskService.getAllTasks();
         // add the user's information and ResourceRequest records to the model
         model.addAttribute("resourceRequests", resourceRequests);
         model.addAttribute("incentiveRequests", incentiveRequests);
         model.addAttribute("leaveRequests", leaveRequests);
         model.addAttribute("announcements", announcements);
-
+        model.addAttribute("tasks", tasks);
         return "adminHome"; // returns the name of your home page HTML template
     }
+    @GetMapping("/tasks/create")
+    public String showCreateTaskForm(Model model) {
+        List<Employee> enabledEmployees = appUserRepository.findByEnabledTrue();
+        model.addAttribute("task", new Task());
+        model.addAttribute("employees", enabledEmployees);
+        return "createTask";
+    }
+    @PostMapping("/tasks/create")
+    public String createTask(@ModelAttribute Task task, @RequestParam("selectedEmail") String selectedEmail) {
+        task.setStatus("Pending");
+        UserDetails userDetails = appUserService.loadUserByUsername(selectedEmail);
+        AppUser appUser = (AppUser) userDetails;
+        task.setAppUser(appUser);
+        taskService.createTask(task);
+        return "redirect:/admin/home";
+    }
+    @PostMapping("/delete-task")
+    public String deleteTask(@RequestParam("id") Long taskId) {
+        taskService.deleteTask(taskId);
+        return "redirect:/admin/home";
+    }
+
     @GetMapping("/announcements/create")
     public String showCreateAnnouncementForm(Model model) {
         model.addAttribute("announcement", new Announcement());
